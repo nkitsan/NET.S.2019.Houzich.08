@@ -1,89 +1,161 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace BooksLibrary
 {
-    public static class BookListService
+    public class BookListService
     {
-        public static void AddBook(this BookCollection books, Book book)
+        private BookCollection books;
+
+        public BookListService(BookCollection books)
         {
-            throw new NotImplementedException();
+            this.books = books;
         }
 
-        public static void RemoveBook(this BookCollection books, Book book)
+        public void AddBook(Book book)
         {
-            throw new NotImplementedException();
+            if (this.books.Contains(book))
+            {
+                throw new ArgumentException("Book collection must not contain book to add");
+            }
+            this.books.AddBook(book);
         }
 
-        public static Book FindBookByISBN(this BookCollection books, string isbn)
+        public void RemoveBook(Book book)
         {
-            throw new NotImplementedException();
+            if (!this.books.Contains(book))
+            {
+                throw new ArgumentException("Book collection must contain book to remove");
+            }
+            this.books.RemoveBook(book);
         }
 
-        public static List<Book> FindBookByAuthor(this BookCollection books, string author)
+        public List<Book> FindBookByISBN(string isbn)
         {
-            throw new NotImplementedException();
+            var result = new List<Book>();
+            foreach (var book in this.books)
+            {
+                if (book.ISBN == isbn)
+                {
+                    result.Add(book);
+                }
+            }
+            return result;
         }
 
-        public static List<Book> FindBookByName(this BookCollection books, string name)
+        public List<Book> FindBookByAuthor(string author)
         {
-            throw new NotImplementedException();
+            var result = new List<Book>();
+            foreach (var book in this.books)
+            {
+                if (book.Author == author)
+                {
+                    result.Add(book);
+                }
+            }
+            return result;
         }
 
-        public static List<Book> FindBookByPublisher(this BookCollection books, string publisher)
+        public List<Book> FindBookByName(string name)
         {
-            throw new NotImplementedException();
+            var result = new List<Book>();
+            foreach (var book in this.books)
+            {
+                if (book.Name == name)
+                {
+                    result.Add(book);
+                }
+            }
+            return result;
         }
 
-        public static List<Book> FindBookByYear(this BookCollection books, short year)
+        public List<Book> FindBookByPublisher(string publisher)
         {
-            throw new NotImplementedException();
+            var result = new List<Book>();
+            foreach (var book in this.books)
+            {
+                if (book.Publisher == publisher)
+                {
+                    result.Add(book);
+                }
+            }
+            return result;
         }
 
-        public static List<Book> FindBookByPages(this BookCollection books, short pages)
+        public List<Book> FindBookByYear(short year)
         {
-            throw new NotImplementedException();
+            var result = new List<Book>();
+            foreach (var book in this.books)
+            {
+                if (book.Year == year)
+                {
+                    result.Add(book);
+                }
+            }
+            return result;
         }
 
-        public static List<Book> FindBookByPrice(this BookCollection books, decimal price)
+        public List<Book> FindBookByPages(short pages)
         {
-            throw new NotImplementedException();
+            var result = new List<Book>();
+            foreach (var book in this.books)
+            {
+                if (book.Pages == pages)
+                {
+                    result.Add(book);
+                }
+            }
+            return result;
         }
 
-        public static void SortBooksByISBN(this BookCollection books)
+        public List<Book> FindBookByPrice(decimal price)
         {
-            throw new NotImplementedException();
+            var result = new List<Book>();
+            foreach (var book in this.books)
+            {
+                if (book.Price == price)
+                {
+                    result.Add(book);
+                }
+            }
+            return result;
         }
 
-        public static void SortBooksByAuthor(this BookCollection books)
+        public IEnumerable<Book> SortBooksByISBN()
         {
-            throw new NotImplementedException();
+            return this.books.OrderBy(book => book.ISBN);
         }
 
-        public static void SortBooksByName(this BookCollection books)
+        public IEnumerable<Book> SortBooksByAuthor()
         {
-            throw new NotImplementedException();
+            return this.books.OrderBy(book => book.Author);
         }
 
-        public static void SortBooksByPublisher(this BookCollection books)
+        public IEnumerable<Book> SortBooksByName()
         {
-            throw new NotImplementedException();
+            return this.books.OrderBy(book => book.Name);
         }
 
-        public static void SortBooksByYear(this BookCollection books)
+        public IEnumerable<Book> SortBooksByPublisher()
         {
-            throw new NotImplementedException();
+            return this.books.OrderBy(book => book.Publisher);
         }
 
-        public static void SortBooksByPages(this BookCollection books)
+        public IEnumerable<Book> SortBooksByYear()
         {
-            throw new NotImplementedException();
+            return this.books.OrderBy(book => book.Year);
         }
 
-        public static void SortBooksByPrice(this BookCollection books)
+        public IEnumerable<Book> SortBooksByPages()
         {
-            throw new NotImplementedException();
+            return this.books.OrderBy(book => book.Pages);
+        }
+
+        public IEnumerable<Book> SortBooksByPrice()
+        {
+            return this.books.OrderBy(book => book.Price);
         }
     }
 }
