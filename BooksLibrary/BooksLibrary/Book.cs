@@ -1,16 +1,31 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace BooksLibrary
 {
+    [DataContract]
     public class Book : IComparable<Book>, IEquatable<Book>
     {
-        public string ISBN { get; }
-        public string Author { get; }
-        public string Name { get; }
-        public string Publisher { get; }
-        public short Year { get; }
-        public short Pages { get; }
-        public decimal Price { get; }
+        [DataMember]
+        public string ISBN { get; set; }
+
+        [DataMember]
+        public string Author { get; set; }
+
+        [DataMember]
+        public string Name { get; set; }
+
+        [DataMember]
+        public string Publisher { get; set; }
+
+        [DataMember]
+        public short Year { get; set; }
+
+        [DataMember]
+        public short Pages { get; set; }
+
+        [DataMember]
+        public decimal Price { get; set; }
 
         private static string isbnPrefics = "978";
 

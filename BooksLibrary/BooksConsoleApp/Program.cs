@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using BooksLibrary;
 
 namespace BooksConsoleApp
@@ -8,11 +7,11 @@ namespace BooksConsoleApp
     {
         static void Main(string[] args)
         {
-            var bookListStorage = new BookListStorage("test.txt");
+            var bookListStorage = BookListStorage.GetInstance();
             var books = bookListStorage.LoadDataFromFile();
             var bookListService = new BookListService(books);
 
-            foreach (var book in bookListService.SortBooksByAuthor())
+            foreach (var book in bookListService.SortBooksByPrice())
             {
                 Console.WriteLine(book);
                 Console.WriteLine("--------------------------------");

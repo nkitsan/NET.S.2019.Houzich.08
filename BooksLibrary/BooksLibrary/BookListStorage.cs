@@ -1,32 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization.Json;
 using System.Text;
 
 namespace BooksLibrary
 {
     public class BookListStorage
     {
-        private string fileName;
+        private static string fileName = "test.txt";
+        private static BookListStorage instance;
 
-        public BookListStorage(string fileName)
+        public static BookListStorage GetInstance()
         {
-            this.fileName = fileName;
+            if (instance == null)
+            {
+                instance = new BookListStorage();
+            }
+            return instance;
         }
+
+        private BookListStorage()
+        { }
 
         public void SaveDataToFile(BookCollection books)
         {
-            using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
+            using (var writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
             {
                 foreach (var book in books)
                 {
-                    writer.Write(book.ISBN);
-                    writer.Write(book.Author);
-                    writer.Write(book.Name);
-                    writer.Write(book.Publisher);
-                    writer.Write(book.Year);
-                    writer.Write(book.Pages);
-                    writer.Write(book.Price);
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        var serializer = new DataContractJsonSerializer(typeof(Book));
+                        serializer.WriteObject(memoryStream, book);
+                        memoryStream.Position = 0;
+                        using (var streamReader = new StreamReader(memoryStream))
+                        {
+                            writer.Write(streamReader.ReadToEnd());
+                        }
+                    }
                 }
             }
         }
@@ -35,21 +46,19 @@ namespace BooksLibrary
         {
             var result = new List<Book>();
 
-            if (File.Exists(this.fileName))
+            if (File.Exists(fileName))
             {
-                using (BinaryReader reader = new BinaryReader(File.Open(this.fileName, FileMode.Open)))
+                using (var reader = new BinaryReader(File.Open(fileName, FileMode.Open)))
                 {
                     while (reader.PeekChar() > -1)
                     {
-                        result.Add(new Book(
-                            reader.ReadString(),
-                            reader.ReadString(),
-                            reader.ReadString(),
-                            reader.ReadString(),
-                            reader.ReadInt16(),
-                            reader.ReadInt16(),
-                            reader.ReadDecimal()
-                        ));
+                        string stringBook = reader.ReadString();
+                        using (var memoryStream = new MemoryStream(Encoding.Unicode.GetBytes(stringBook)))
+                        {
+                            var deserializer = new DataContractJsonSerializer(typeof(Book));
+                            var book = (Book)deserializer.ReadObject(memoryStream);
+                            result.Add(book);
+                        }
                     }
                 }
             }
