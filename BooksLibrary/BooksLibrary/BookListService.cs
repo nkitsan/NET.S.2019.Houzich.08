@@ -18,7 +18,7 @@ namespace BooksLibrary
         {
             if (this.books.Contains(book))
             {
-                throw new ArgumentException("Book collection must not contain book to add");
+                throw new ArgumentException("Book collection must not contain a book to add");
             }
             this.books.AddBook(book);
         }
@@ -27,100 +27,61 @@ namespace BooksLibrary
         {
             if (!this.books.Contains(book))
             {
-                throw new ArgumentException("Book collection must contain book to remove");
+                throw new ArgumentException("Book collection must contain a book to remove");
             }
             this.books.RemoveBook(book);
         }
 
-        public List<Book> FindBookByISBN(string isbn)
+        private IEnumerable<Book> FindBooksByTag(FieldEnum field, string value)
         {
-            var result = new List<Book>();
             foreach (var book in this.books)
             {
-                if (book.ISBN == isbn)
+                if ((field == FieldEnum.ISBN && book.ISBN == value) ||
+                   (field == FieldEnum.Author && book.Author == value) ||
+                   (field == FieldEnum.Name && book.Name == value) ||
+                   (field == FieldEnum.Publisher && book.Publisher == value) ||
+                   (field == FieldEnum.Year && book.Year == short.Parse(value)) ||
+                   (field == FieldEnum.Pages && book.Pages == short.Parse(value)) ||
+                   (field == FieldEnum.Price && book.Price == decimal.Parse(value)))
                 {
-                    result.Add(book);
+                    yield return book;
                 }
             }
-            return result;
         }
 
-        public List<Book> FindBookByAuthor(string author)
+        public List<Book> FindBooksByISBN(string isbn)
         {
-            var result = new List<Book>();
-            foreach (var book in this.books)
-            {
-                if (book.Author == author)
-                {
-                    result.Add(book);
-                }
-            }
-            return result;
+            return FindBooksByTag(FieldEnum.ISBN, isbn).ToList();
         }
 
-        public List<Book> FindBookByName(string name)
+        public List<Book> FindBooksByAuthor(string author)
         {
-            var result = new List<Book>();
-            foreach (var book in this.books)
-            {
-                if (book.Name == name)
-                {
-                    result.Add(book);
-                }
-            }
-            return result;
+            return FindBooksByTag(FieldEnum.Author, author).ToList();
         }
 
-        public List<Book> FindBookByPublisher(string publisher)
+        public List<Book> FindBooksByName(string name)
         {
-            var result = new List<Book>();
-            foreach (var book in this.books)
-            {
-                if (book.Publisher == publisher)
-                {
-                    result.Add(book);
-                }
-            }
-            return result;
+            return FindBooksByTag(FieldEnum.Name, name).ToList();
         }
 
-        public List<Book> FindBookByYear(short year)
+        public List<Book> FindBooksByPublisher(string publisher)
         {
-            var result = new List<Book>();
-            foreach (var book in this.books)
-            {
-                if (book.Year == year)
-                {
-                    result.Add(book);
-                }
-            }
-            return result;
+            return FindBooksByTag(FieldEnum.Publisher, publisher).ToList();
         }
 
-        public List<Book> FindBookByPages(short pages)
+        public List<Book> FindBooksByYear(short year)
         {
-            var result = new List<Book>();
-            foreach (var book in this.books)
-            {
-                if (book.Pages == pages)
-                {
-                    result.Add(book);
-                }
-            }
-            return result;
+            return FindBooksByTag(FieldEnum.Year, year.ToString()).ToList();
         }
 
-        public List<Book> FindBookByPrice(decimal price)
+        public List<Book> FindBooksByPages(short pages)
         {
-            var result = new List<Book>();
-            foreach (var book in this.books)
-            {
-                if (book.Price == price)
-                {
-                    result.Add(book);
-                }
-            }
-            return result;
+            return FindBooksByTag(FieldEnum.Pages, pages.ToString()).ToList();
+        }
+
+        public List<Book> FindBooksByPrice(decimal price)
+        {
+            return FindBooksByTag(FieldEnum.Price, price.ToString()).ToList();
         }
 
         public IEnumerable<Book> SortBooksByISBN()

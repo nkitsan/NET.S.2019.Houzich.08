@@ -16,11 +16,7 @@ namespace BooksLibrary
 
         public bool Contains(Book book)
         {
-            if (this.books.Contains(book))
-            {
-                return true;
-            }
-            return false;
+            return this.books.Contains(book);
         }
 
         public void AddBook(Book book)
