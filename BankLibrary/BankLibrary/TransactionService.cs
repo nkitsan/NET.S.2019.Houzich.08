@@ -8,7 +8,7 @@ namespace BankLibrary
     {
         public static void CompleteTransaction(Transaction transaction)
         {
-            transaction.FromAccount.Card.WithDraw(transaction.Ammount);
+            transaction.FromAccount.Card.Withdraw(transaction.Ammount);
             transaction.ToAccount.Card.Deposit(transaction.Ammount);
         }
     }
