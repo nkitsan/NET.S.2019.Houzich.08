@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Runtime.Serialization;
 
 namespace BankLibrary
 {
+    [DataContract(Name = "Standard")]
     public class StandardCard : AbstractCard
     {
         public StandardCard(decimal ammount)

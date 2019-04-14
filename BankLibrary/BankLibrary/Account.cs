@@ -1,15 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Runtime.Serialization;
 
 namespace BankLibrary
 {
-    public abstract class Account
+    [DataContract]
+    [KnownType(typeof(StandardCard))]
+    [KnownType(typeof(GoldCard))]
+    public class Account
     {
-        public string Id { get; }
-        public string FirstName { get; }
-        public string SecondName { get; }
-        public AbstractCard Card { get; }
+        [DataMember]
+        public string Id { get; set; }
+
+        [DataMember]
+        public string FirstName { get; set; }
+
+        [DataMember]
+        public string SecondName { get; set; }
+
+        [DataMember]
+        public AbstractCard Card { get; set; }
 
         public Account(string id, string firstName, string secondName, AbstractCard card)
         {
@@ -26,7 +35,7 @@ namespace BankLibrary
             this.Id = id;
             this.FirstName = firstName;
             this.SecondName = secondName;
-            this.Card = Card;
+            this.Card = card;
         }
 
         private bool ValidateName(string name)

@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Runtime.Serialization;
 
 namespace BankLibrary
 {
+    [DataContract(Name = "Gold")]
     public class GoldCard : AbstractCard
     {
-        private decimal smallAmmount = 1000;
-        private decimal averageAmmount = 3000;
-        private decimal bigAmmount = 5000;
-        private int percentageDivider = 10000;
+        private static decimal smallAmmount = 1000;
+        private static decimal averageAmmount = 3000;
+        private static decimal bigAmmount = 5000;
+        private static int percentageDivider = 10000;
 
         public GoldCard(decimal ammount)
         {
