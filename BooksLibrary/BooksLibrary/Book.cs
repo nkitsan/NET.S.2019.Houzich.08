@@ -36,12 +36,22 @@ namespace BooksLibrary
                 throw new ArgumentException("ISBN must start from prefix 978");
             }
 
-            foreach(var c in isbn)
+            foreach (var c in isbn)
             {
                 if (!char.IsDigit(c))
                 {
                     throw new ArgumentException("ISBN must consist only digits");
                 }
+            }
+
+            if (year < 0)
+            {
+                throw new ArgumentOutOfRangeException("Year can not be less than zero");
+            }
+
+            if (price < 0)
+            {
+                throw new ArgumentOutOfRangeException("Price can not be less than zero");
             }
 
             this.ISBN = isbn;
@@ -57,6 +67,28 @@ namespace BooksLibrary
         {
             return $"ISBN: {this.ISBN}\nAuthor: {this.Author}\nName: {this.Name}\nPublisher: {this.Publisher}\n" +
                     $"Year: {this.Year}\nPages: {this.Pages}\nPrice: {this.Price}";
+        }
+
+        public string ToString(StringFormEnum form)
+        {
+            string name = $"{this.Author}, {this.Name}";
+
+            if (form == StringFormEnum.ShortAndPublisher)
+            {
+                return name + $", {this.Publisher}, {this.Year}";
+            }
+
+            if (form == StringFormEnum.Full)
+            {
+                return $"{this.ISBN}, " + name + $", {this.Publisher}, {this.Year}, P.{this.Pages}";
+            }
+
+            if (form == StringFormEnum.FullWithPrice)
+            {
+                return $"{this.ISBN}, " + name + $", {this.Publisher}, {this.Year}, P.{this.Pages}, {this.Price}$";
+            }
+
+            return name;
         }
 
         public int CompareTo(Book other)
